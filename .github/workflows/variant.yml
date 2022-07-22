@@ -1,128 +1,122 @@
-name: "Variants demo using GitHub actions"
+name: "variant"
 
 # Controls when the action will run.
 on:
   push:
     paths:
-      - '*.sch'
+      - '*.kicad_sch'
       - '*.kicad_pcb'
       - '*.kibot.yaml'
       - 'Makefile'
-      - '.github/workflows/kibot_action.yml'
+      - '.github/workflows/variant.yml'
   pull_request:
     paths:
-      - '*.sch'
+      - '*.kicad_sch'
       - '*.kicad_pcb'
       - '*.kibot.yaml'
       - 'Makefile'
-      - '.github/workflows/kibot_action.yml'
+      - '.github/workflows/variant.yml'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   ERC:
     runs-on: ubuntu-latest
+    container: setsoft/kicad_auto:dev_k6
 
     steps:
     - uses: actions/checkout@v2
 
     - name: Run ERC
-      uses: INTI-CMNB/KiBot@v2_k6
-      with:
-        kicad: 5
-        dir: Generated
-        skip: run_drc
-        targets: __NONE__
+      run: |
+        make erc
 
     - name: Retrieve results
+      if: ${{ failure() }}
       uses: actions/upload-artifact@v2
       with:
-        name: ERC_Output
+        name: ERC_Fail_Results
         path: Generated
-
 
   DRC:
     runs-on: ubuntu-latest
+    container: setsoft/kicad_auto:dev_k6
     needs: ERC
 
     steps:
     - uses: actions/checkout@v2
 
     - name: Run DRC
-      uses: INTI-CMNB/KiBot@v2_k6
-      with:
-        kicad: 5
-        dir: Generated
-        skip: run_erc
-        targets: __NONE__
+      run: |
+        make drc
 
     - name: Retrieve results
-      uses: actions/upload-artifact@v1
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
       with:
-        name: DRC_Output
+        name: DRC_Fail_Results
         path: Generated
 
-
   default:
-    name: "Default variant"
+    name: "default variant"
     runs-on: ubuntu-latest
     needs: [ERC, DRC]
 
     steps:
     - uses: actions/checkout@v2
 
-    - uses: INTI-CMNB/KiBot@v2_k6
+    - uses: INTI-CMNB/KiBot@v2_dk6
       with:
-        kicad: 5
         dir: default
         variant: default
         skip: all
 
     - name: upload results
+      if: ${{ success() }}
       uses: actions/upload-artifact@v2
       with:
-        name: default_variant
+        name: variant_default_results
         path: default
 
-
-  USB:
-    name: "USB variant"
+  maximal:
+    name: "maximal variant"
     runs-on: ubuntu-latest
     needs: [ERC, DRC]
 
     steps:
     - uses: actions/checkout@v2
 
-    - uses: INTI-CMNB/KiBot@v2_k6
+    - uses: INTI-CMNB/KiBot@v2_dk6
       with:
-        kicad: 5
-        dir: USB
-        variant: USB
+        dir: maximal
+        variant: maximal
         skip: all
 
     - name: upload results
+      if: ${{ success() }}
       uses: actions/upload-artifact@v2
       with:
-        name: USB_variant
-        path: USB
+        name: variant_maximal_results
+        path: maximal
 
 
-  XTAL:
-    name: "XTAL variant"
+  minimal:
+    name: "minimal variant"
     runs-on: ubuntu-latest
     needs: [ERC, DRC]
 
     steps:
     - uses: actions/checkout@v2
 
-    - uses: INTI-CMNB/KiBot@v2_k6
+    - uses: INTI-CMNB/KiBot@v2_dk6
       with:
-        kicad: 5
-        dir: XTAL
-        variant: XTAL
+        dir: minimal
+        variant: minimal
         skip: all
 
     - name: upload results
+      if: ${{ success() }}
       uses: actions/upload-artifact@v2
       with:
-        name: XTAL_variant
-        path: XTAL
+        name: variant_minimal_results
+        path: minimal
+

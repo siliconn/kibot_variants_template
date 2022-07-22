@@ -3,7 +3,7 @@ KIBOT?=kibot
 DEBUG?=
 OUT_DIR=Generated
 
-all: erc drc ardu_prog
+all: erc drc template
 
 erc:
 	$(KIBOT) $(DEBUG) -d $(OUT_DIR) -s run_drc,update_xml -i
@@ -17,12 +17,12 @@ netlist:
 var_default:
 	$(KIBOT) $(DEBUG) -d $(OUT_DIR)/default -g variant=default -s all
 
-var_usb:
-	$(KIBOT) $(DEBUG) -d $(OUT_DIR)/USB -g variant=USB -s all
+var_maximal:
+	$(KIBOT) $(DEBUG) -d $(OUT_DIR)/maximal -g variant=maximal -s all
 
-var_xtal:
-	$(KIBOT) $(DEBUG) -d $(OUT_DIR)/XTAL -g variant=XTAL -s all
+var_minimal:
+	$(KIBOT) $(DEBUG) -d $(OUT_DIR)/minimal -g variant=minimal -s all
 
-ardu_prog: netlist var_default var_usb var_xtal
+template: netlist var_default var_maximal var_minimal
 
-.PHONY: ardu_prog erc drc netlist var_default var_usb var_xtal
+.PHONY: template erc drc netlist var_default var_maximal var_minimal

@@ -1,4 +1,3 @@
-# Example KiBot config file for ardu_prog.pro
 kibot:
   version: 1
 
@@ -18,20 +17,20 @@ preflight:
 
 variants:
   - name: 'default'
-    comment: 'Minimal PCB no USB'
+    comment: 'Normal but no USB'
     type: kibom
 
-  - name: 'USB'
+  - name: 'maximal'
     comment: 'Full board'
     type: kibom
-    file_id: _USB
-    variant: USB
+    file_id: _MAX
+    variant: maximal
 
-  - name: 'XTAL'
-    comment: 'No USB, but crystal included'
+  - name: 'minimal'
+    comment: 'crystal included'
     type: kibom
-    file_id: _XTAL
-    variant: XTAL
+    file_id: _MIN
+    variant: minimal
 
 outputs:
   - name: 'bom_xlsx'
@@ -41,7 +40,7 @@ outputs:
     options: &bom_options
       xlsx:
         datasheet_as_link: MFP
-        title: 'KiBot variants example'
+        title: 'KiBot variants template'
         max_col_width: 40
         highlight_empty: false
       columns:
@@ -66,7 +65,7 @@ outputs:
       format: HTML
       html:
         datasheet_as_link: MFP
-        title: 'KiBot variants example'
+        title: 'KiBot variants template'
         highlight_empty: false
 
   - name: ibom
@@ -121,7 +120,7 @@ outputs:
     options:
       force_edge_cuts: true
       keep_temporal_files: true
-      title: "Arduino programmer KiBot demo"
+      title: "KiBot demo"
       sheet_reference_layout: pcb_print.kicad_wks
       scaling: 2.0
       pages:
@@ -172,7 +171,7 @@ outputs:
       dpi: 300
       bottom: true
       output: '%f-%i%v-filled.%x'
-      
+
   - name: 3D
     comment: "STEP 3D model"
     type: step

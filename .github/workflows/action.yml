@@ -1,0 +1,97 @@
+name: "action"
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    paths:
+      - '*.kicad_sch'
+      - '*.kicad_pcb'
+      - '*.kibot.yaml'
+      - '.github/workflows/action.yml'
+  pull_request:
+    paths:
+      - '*.kicad_sch'
+      - '*.kicad_pcb'
+      - '*.kibot.yaml'
+      - '.github/workflows/action.yml'
+
+jobs:
+  ERC:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Run ERC
+      uses: INTI-CMNB/KiBot@v2_dk6
+      with:
+        dir: Generated
+        skip: run_drc
+        targets: __NONE__
+
+    - name: Retrieve results
+      uses: actions/upload-artifact@v2
+      with:
+        name: action_ERC_results
+        path: Generated
+
+  DRC:
+    runs-on: ubuntu-latest
+    needs: ERC
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Run DRC
+      uses: INTI-CMNB/KiBot@v2_dk6
+      with:
+        dir: Generated
+        skip: run_erc
+        targets: __NONE__
+
+    - name: Retrieve results
+      uses: actions/upload-artifact@v2
+      with:
+        name: action_DRC_results
+        path: Generated
+
+
+  automatic:
+    name: "Quick Start"
+    runs-on: ubuntu-latest
+    needs: [ERC, DRC]
+
+    steps:
+    - name: Get repo
+      uses: actions/checkout@v2
+
+    - name: Run KiBot
+      uses: INTI-CMNB/KiBot@v2_dk6
+      with:
+        quickstart: YES
+
+    - name: Upload results
+      uses: actions/upload-artifact@v2
+      with:
+        name: automatic_results
+        path: Generated
+
+  Variants:
+    name: fabrication files
+    runs-on: ubuntu-latest
+    container: setsoft/kicad_auto:dev_k6
+    needs: [ERC, DRC]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Run schematic stuff
+      run: |
+        make template
+
+    - name: Retrieve results
+      uses: actions/upload-artifact@v2
+      with:
+        name: all_variants_files
+        path: Generated

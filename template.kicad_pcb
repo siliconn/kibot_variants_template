@@ -8,7 +8,7 @@
   (title_block
     (rev "${git_hash}")
     (company "Instituto Nacional de Tecnología Industrial")
-    (comment 4 "An example of KiBot variants")
+    (comment 4 "KiBot variants template")
   )
 
   (layers
@@ -3322,7 +3322,7 @@
   (gr_line (start 182 101.3) (end 182 65.7) (layer "Edge.Cuts") (width 0.05) (tstamp 10d8ad0e-6a08-4053-92aa-23a15910fd21))
   (gr_line (start 119 65.7) (end 119 101.3) (layer "Edge.Cuts") (width 0.05) (tstamp 475ed8b3-90bf-48cd-bce5-d8f48b689541))
   (gr_line (start 182 65.7) (end 119 65.7) (layer "Edge.Cuts") (width 0.05) (tstamp fc83cd71-1198-4019-87a1-dc154bceead3))
-  (gr_text "KiBot variants example\nNot a real life board" (at 128.7272 88.011) (layer "B.SilkS") (tstamp 946404ba-9297-43ec-9d67-30184041145f)
+  (gr_text "variants template" (at 128.7272 88.011) (layer "B.SilkS") (tstamp 946404ba-9297-43ec-9d67-30184041145f)
     (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
   )
   (dimension (type aligned) (layer "Dwgs.User") (tstamp 76afa8e0-9b3a-439d-843c-ad039d3b6354)
