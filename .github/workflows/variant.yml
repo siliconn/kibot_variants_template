@@ -3,6 +3,8 @@ name: "variant"
 # Controls when the action will run.
 on:
   push:
+    branches:
+      - main
     paths:
       - '*.kicad_sch'
       - '*.kicad_pcb'
@@ -10,12 +12,14 @@ on:
       - 'Makefile'
       - '.github/workflows/variant.yml'
   pull_request:
+    branches:
+      - main
     paths:
       - '*.kicad_sch'
       - '*.kicad_pcb'
       - '*.kibot.yaml'
       - 'Makefile'
-      - '.github/workflows/kibot_action.yml'
+      - '.github/workflows/variant.yml'
   repository_dispatch:
     types: [run_gha]
 
