@@ -15,7 +15,9 @@ on:
       - '*.kicad_pcb'
       - '*.kibot.yaml'
       - 'Makefile'
-      - '.github/workflows/variant.yml'
+      - '.github/workflows/kibot_action.yml'
+  repository_dispatch:
+    types: [run_gha]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -24,7 +26,7 @@ jobs:
     container: setsoft/kicad_auto:dev_k6
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Run ERC
       run: |
@@ -43,7 +45,7 @@ jobs:
     needs: ERC
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Run DRC
       run: |
@@ -62,7 +64,7 @@ jobs:
     needs: [ERC, DRC]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - uses: INTI-CMNB/KiBot@v2_dk6
       with:
@@ -83,7 +85,7 @@ jobs:
     needs: [ERC, DRC]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - uses: INTI-CMNB/KiBot@v2_dk6
       with:
@@ -105,7 +107,7 @@ jobs:
     needs: [ERC, DRC]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - uses: INTI-CMNB/KiBot@v2_dk6
       with:
